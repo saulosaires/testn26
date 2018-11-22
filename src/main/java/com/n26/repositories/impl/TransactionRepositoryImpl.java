@@ -1,14 +1,16 @@
 package com.n26.repositories.impl;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Repository;
 
 import com.n26.models.Transaction;
 import com.n26.repositories.TransactionRepository;
 
+@Repository
 public class TransactionRepositoryImpl implements TransactionRepository {
 
 	private Map<LocalDateTime, Transaction> transactionsMap = new ConcurrentHashMap<>();
@@ -21,9 +23,9 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 	}
 
 	@Override
-	public List<Transaction> findAll() {
+	public Collection<Transaction> findAll() {
 
-		return transactionsMap.values().stream().collect(Collectors.toList());
+		return transactionsMap.values();
 	}
 
 	@Override
