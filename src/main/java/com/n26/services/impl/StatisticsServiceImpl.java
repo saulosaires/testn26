@@ -19,8 +19,11 @@ public class StatisticsServiceImpl implements StatisticsService {
 	@Value("${temporal_window}")
     public  int TEMPORAL_WINDOW_SECONDS;
 	
-	int roundingMode =BigDecimal.ROUND_HALF_UP;
-	int scale=2;
+	@Value("${roundingMode}")
+	int roundingMode;
+	
+	@Value("${scale}")
+	int scale;
 	
     @Autowired
     private TransactionRepository transactionRepository;

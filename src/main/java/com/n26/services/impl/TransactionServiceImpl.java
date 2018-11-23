@@ -16,8 +16,6 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Value("${temporal_window}")
     public  int TEMPORAL_WINDOW_SECONDS;
-
-	private static final  String ZONE_ID="UTC";
 	
     @Autowired
     private TransactionRepository transactionRepository;
@@ -63,7 +61,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private boolean isInTheFuture(Transaction transaction){
     	
-    	return TransactionUtils.isInTheFuture(transaction,ZONE_ID);
+    	return TransactionUtils.isInTheFuture(transaction);
          
     }
 
