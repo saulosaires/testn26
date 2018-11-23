@@ -1,22 +1,24 @@
 package com.n26.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.n26.exceptions.ExpiredTransactionException;
 import com.n26.exceptions.InvalidTransactionException;
 import com.n26.models.Transaction;
 import com.n26.repositories.TransactionRepository;
 import com.n26.services.TransactionService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
+import com.n26.utils.TransactionUtils;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
-    public static final int TEMPORAL_WINDOW_SECONDS = 60;
+	@Value("${temporal_window}")
+    public  int TEMPORAL_WINDOW_SECONDS;
 
+	private static final  String ZONE_ID="UTC";
+	
     @Autowired
     private TransactionRepository transactionRepository;
 
@@ -42,7 +44,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 
         if(!isInTheTemporalWindow(transaction)){
-            throw new InvalidTransactionException("Transaction time is not in the temporal window of "+TEMPORAL_WINDOW_SECONDS+" seconds");
+            throw new ExpiredTransactionException("Transaction time is not in the temporal window of "+TEMPORAL_WINDOW_SECONDS+" seconds");
         }
 
         return true;
@@ -50,18 +52,19 @@ public class TransactionServiceImpl implements TransactionService {
 
     private boolean isValidFields(Transaction transaction){
 
-        return transaction.getTime()!=null;
+        return transaction.getTimestamp()!=null && transaction.getAmount()!=null;
     }
 
     private boolean isInTheTemporalWindow(Transaction transaction){
+    	
+    	return TransactionUtils.isInTheTemporalWindow(transaction, TEMPORAL_WINDOW_SECONDS);
 
-        return ChronoUnit.SECONDS.between(LocalDateTime.now(),transaction.getTime())< TEMPORAL_WINDOW_SECONDS;
     }
 
     private boolean isInTheFuture(Transaction transaction){
-
-        return LocalDateTime.now().compareTo(transaction.getTime())<0;
-
+    	
+    	return TransactionUtils.isInTheFuture(transaction,ZONE_ID);
+         
     }
 
 }

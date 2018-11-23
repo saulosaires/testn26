@@ -1,32 +1,45 @@
 package com.n26.models;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.n26.helper.TransactionDeserializer;
+
+@JsonDeserialize(using=TransactionDeserializer.class) 
 public class Transaction {
 
-	private Double amount;
-	private LocalDateTime time;
+	private BigDecimal amount;
+	
+	@DateTimeFormat(pattern="YYYY-MM-DDThh:mm:ss.sssZ")
+	private ZonedDateTime timestamp;
 
-	public Transaction(Double amount, LocalDateTime time) {
+	public Transaction() {}
+	
+	public Transaction(BigDecimal amount, ZonedDateTime timestamp) {
 		super();
 		this.amount = amount;
-		this.time = time;
+		this.timestamp = timestamp;
 	}
 
-	public Double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
-	public LocalDateTime getTime() {
-		return time;
+	public ZonedDateTime getTimestamp() {
+		return timestamp;
 	}
 
-	public void setTime(LocalDateTime time) {
-		this.time = time;
+	public void setTimestamp(ZonedDateTime timestamp) {
+		this.timestamp = timestamp;
 	}
+
+ 
 
 }

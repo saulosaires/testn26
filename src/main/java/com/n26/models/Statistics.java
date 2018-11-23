@@ -2,12 +2,23 @@ package com.n26.models;
 
 import java.math.BigDecimal;
 
-public class Statistics {
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
+public class Statistics {
+	
+	@JsonFormat(shape=Shape.STRING)
 	private BigDecimal sum;
+	
+	@JsonFormat(shape=Shape.STRING)
 	private BigDecimal avg;
+	
+	@JsonFormat(shape=Shape.STRING)
 	private BigDecimal max;
+	
+	@JsonFormat(shape=Shape.STRING)
 	private BigDecimal min;
+	
 	private Long count;
 	
 

@@ -1,9 +1,8 @@
 package com.n26.repositories.impl;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Repository;
 
@@ -13,12 +12,14 @@ import com.n26.repositories.TransactionRepository;
 @Repository
 public class TransactionRepositoryImpl implements TransactionRepository {
 
-	private Map<LocalDateTime, Transaction> transactionsMap = new ConcurrentHashMap<>();
+	AtomicInteger id = new AtomicInteger(1);
+	
+	private ConcurrentSkipListMap<Integer, Transaction> transactionsMap = new ConcurrentSkipListMap<>();
 	
 	@Override
 	public void save(Transaction transaction) {
 		
-		transactionsMap.put(transaction.getTime(), transaction);
+		transactionsMap.put(id.incrementAndGet(), transaction);
 		
 	}
 
